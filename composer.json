@@ -5,12 +5,11 @@
     "description": "High performance FastCGI server base on swoole.",
     "require": {
         "ext-swoole": ">=1.5.0",
-        "laravel/framework": ">=4.2.0"
     },
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "\\" : "src"
+            "Stone\\" : "src/Stone"
         }
     },
     "minimum-stability": "dev",
