@@ -17,10 +17,10 @@ class StoneServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(
-            __DIR__.'/../../../config/stone.php', 'stone.web'
+            __DIR__.'/../../config/stone.php', 'stone.web'
         );
         $this->mergeConfigFrom(
-            __DIR__.'/../../../config/stone.php', 'stone.server'
+            __DIR__.'/../../config/stone.php', 'stone.server'
         );
 
         $this->app->singleton('snap', function() {return new Repository();});
