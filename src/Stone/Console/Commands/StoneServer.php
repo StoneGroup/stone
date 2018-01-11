@@ -4,8 +4,6 @@ namespace Stone\Console\Commands;
 
 use Illuminate\Console\Command;
 use Stone\FastCGI\Server;
-use Config;
-use App;
 
 class StoneServer extends Command
 {
@@ -21,7 +19,7 @@ class StoneServer extends Command
      *
      * @var string
      */
-    protected $description = 'A FastCGI server base on swoole and laravel';
+    protected $description = 'A FastCGI server base on swoole with laravel or lumen';
 
     /**
      * Create a new command instance.
@@ -42,26 +40,26 @@ class StoneServer extends Command
     {
         //
         try {
-            $config = Config::get('stone.server');
+            $config = config('stone.server');
             if ($this->option('debug')) {
                 $config['daemonize'] = false;
             }
 
-            $server = new Server($config, App::make($config['handler']));
+            $server = new Server($config, app($config['handler']));
 
             if ($this->option('reload')) {
                 if ($server->reload()) {
-                    return $this->info(' [OK]');
+                    return $this->info('reload [OK]');
                 }
             }
 
             if ($this->option('stop')) {
                 if ($server->stop()) {
-                    return $this->info(' [OK]');
+                    return $this->info('stop [OK]');
                 }
             }
 
-            $this->info(' [OK]');
+            $this->info('start [OK]');
             $server->start();
         } catch (Exception $e) {
             return $this->error($e->getMessage());

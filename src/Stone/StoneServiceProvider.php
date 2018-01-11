@@ -4,7 +4,6 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Facade;
 use Stone\Snap\Runkit;
 use Stone\Snap\Repository;
-use Config;
 
 class StoneServiceProvider extends ServiceProvider
 {
@@ -16,6 +15,16 @@ class StoneServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $isLumen = false;
+
+        if (strpos(strtolower($this->app->version()), 'lumen') !== false) {
+            $isLumen = true;
+        }
+
+        if ($isLumen) {
+            app()->configure('stone');
+        }
+
         $this->mergeConfigFrom(
             __DIR__.'/../../config/stone.php', 'stone.web'
         );
@@ -23,9 +32,11 @@ class StoneServiceProvider extends ServiceProvider
             __DIR__.'/../../config/stone.php', 'stone.server'
         );
 
-        $this->app->singleton('snap', function() {return new Repository();});
+        if (!$isLumen) {
+            $this->app->singleton('snap', function() {return new Repository();});
 
-        $this->injectFacade();
+            $this->injectFacade();
+        }
     }
 
     public function injectFacade()
